@@ -90,6 +90,7 @@ resource "google_cloud_run_v2_service" "this" {
   ingress     = each.value.ingress
   labels      = merge({ managed_by = "terraform" }, each.value.labels)
   annotations = each.value.annotations
+  deletion_protection = false
 
   template {
     service_account                  = google_service_account.service[each.key].email

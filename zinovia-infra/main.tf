@@ -78,7 +78,10 @@ module "network" {
   firewall_rules = local.effective_firewall
   vpc_connector  = local.effective_vpc_connector
   psa_config     = var.psa_config
-  depends_on     = [module.services]
+  depends_on = [
+    module.services,
+    google_project_iam_member.vpcaccess_network_user
+  ]
 }
 
 module "database" {
@@ -185,7 +188,7 @@ module "cloud_run" {
 
   project_id                 = var.project_id
   region                     = var.region
-  vpc_connector              = module.network.vpc_connector_name
+  vpc_connector              = module.network.vpc_connector_id
   services                   = local.frontend_services
   service_account_base_roles = var.service_account_base_roles
   depends_on                 = [module.services]
@@ -216,5 +219,16 @@ module "monitoring" {
   cloud_run_services    = module.cloud_run.service_names
   notification_channels = var.monitoring_notification_channels
   depends_on            = [module.services]
+}
+
+data "google_project" "current" {
+  project_id = var.project_id
+}
+
+resource "google_project_iam_member" "vpcaccess_network_user" {
+  project    = var.project_id
+  role       = "roles/compute.networkUser"
+  member     = "serviceAccount:service-${data.google_project.current.number}@gcp-sa-vpcaccess.iam.gserviceaccount.com"
+  depends_on = [module.services]
 }
 

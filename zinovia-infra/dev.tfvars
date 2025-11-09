@@ -3,7 +3,7 @@ region      = "europe-west1"
 environment = "dev"
 
 domain_name        = "zinovia.ai"
-additional_domains = ["zinovia.ai"]
+additional_domains = ["www.zinovia.ai"]
 
 frontend_services = [
   {
@@ -22,7 +22,7 @@ frontend_services = [
   },
   {
     name            = "api-backend-dev"
-    image           = "europe-west1-docker.pkg.dev/zinovia-ia/backend/zinovia-backend:dev"
+    image           = "gcr.io/cloudrun/hello"
     min_instances   = 0
     max_instances   = 10
     concurrency     = 40

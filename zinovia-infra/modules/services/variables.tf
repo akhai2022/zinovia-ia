@@ -20,6 +20,7 @@ variable "services" {
     "stackdriver.googleapis.com",
     "servicenetworking.googleapis.com",
     "sqladmin.googleapis.com",
+    "deploymentmanager.googleapis.com",
   ]
 }
 

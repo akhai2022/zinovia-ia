@@ -73,18 +73,18 @@ resource "google_monitoring_alert_policy" "error_rate" {
 
   conditions {
     display_name = "5xx error ratio > 5% for 5 minutes"
-    condition_monitoring_query_language {
-      query    = <<-EOT
-        fetch cloud_run_revision
-        | metric 'run.googleapis.com/request_count'
-        | filter resource.project_id == '${var.project_id}'
-        | align rate(1m)
-        | group_by [metric.response_code_class], sum(value.request_count)
-        | pivot
-        | value '5xx' / (value '5xx' + value '2xx' + value '3xx' + value '4xx')
-        | condition val() > 0.05 'ratio'
-      EOT
-      duration = "300s"
+    condition_threshold {
+      filter          = "resource.type=\"cloud_run_revision\" AND metric.type=\"run.googleapis.com/request_count\" AND resource.labels.project_id=\"${var.project_id}\" AND metric.label.response_code_class=\"5xx\""
+      duration        = "300s"
+      comparison      = "COMPARISON_GT"
+      threshold_value = 5
+
+      aggregations {
+        alignment_period     = "60s"
+        per_series_aligner   = "ALIGN_RATE"
+        cross_series_reducer = "REDUCE_SUM"
+        group_by_fields      = ["resource.project_id"]
+      }
     }
   }
 

@@ -91,7 +91,7 @@ variable "vpc_connector_config" {
     name           = optional(string, "frontend-connector")
     machine_type   = optional(string, "e2-micro")
     min_instances  = optional(number, 2)
-    max_instances  = optional(number, 10)
+    max_instances  = optional(number, 3)
     subnet_name    = optional(string, "connector-subnet")
     min_throughput = optional(number, 200)
     max_throughput = optional(number, 300)

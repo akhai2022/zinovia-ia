@@ -36,6 +36,7 @@ locals {
   raw_connector_name       = lower(coalesce(var.vpc_connector.name, "frontend-connector"))
   sanitized_connector_name = substr(trim(join("-", regexall("[a-z0-9]+", local.raw_connector_name)), "-"), 0, 25)
   vpc_connector_name       = length(local.sanitized_connector_name) > 1 ? local.sanitized_connector_name : "frontend-connector"
+  connector_subnet_name    = coalesce(try(var.vpc_connector.subnet_name, null), "connector-subnet")
 }
 
 resource "google_compute_network" "this" {
@@ -105,16 +106,21 @@ resource "google_vpc_access_connector" "serverless" {
   project = var.project_id
 
   subnet {
-    name = coalesce(var.vpc_connector.subnet_name, "services-subnet")
+    name       = google_compute_subnetwork.this[local.connector_subnet_name].name
+    project_id = var.project_id
   }
 
-  min_instances = var.vpc_connector.min_instances
-  max_instances = var.vpc_connector.max_instances
-  machine_type  = var.vpc_connector.machine_type
+  min_instances = coalesce(try(var.vpc_connector.min_instances, null), 2)
+  max_instances = coalesce(try(var.vpc_connector.max_instances, null), 3)
+  machine_type  = coalesce(try(var.vpc_connector.machine_type, null), "e2-micro")
 
   lifecycle {
     create_before_destroy = true
   }
 
+  timeouts {
+    create = "30m"
+    delete = "30m"
+  }
 }
 

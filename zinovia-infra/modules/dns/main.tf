@@ -129,7 +129,7 @@ resource "google_compute_global_forwarding_rule" "https_ipv4" {
   ip_protocol           = "TCP"
   port_range            = "443"
   target                = google_compute_target_https_proxy.this.self_link
-  ip_address            = google_compute_global_address.lb_ipv4.self_link
+  ip_address            = google_compute_global_address.lb_ipv4.address
   labels = {
     environment = "frontend"
   }
@@ -142,8 +142,7 @@ resource "google_compute_global_forwarding_rule" "https_ipv6" {
   ip_protocol           = "TCP"
   port_range            = "443"
   target                = google_compute_target_https_proxy.this.self_link
-  ip_address            = google_compute_global_address.lb_ipv6.self_link
-  ip_version            = "IPV6"
+  ip_address            = google_compute_global_address.lb_ipv6.address
 }
 
 resource "google_compute_global_forwarding_rule" "http" {
@@ -153,7 +152,7 @@ resource "google_compute_global_forwarding_rule" "http" {
   ip_protocol           = "TCP"
   port_range            = "80"
   target                = google_compute_target_http_proxy.redirect.self_link
-  ip_address            = google_compute_global_address.lb_ipv4.self_link
+  ip_address            = google_compute_global_address.lb_ipv4.address
 }
 
 resource "google_dns_record_set" "a_records" {
