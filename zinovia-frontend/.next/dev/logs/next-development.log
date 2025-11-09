@@ -1,0 +1,25 @@
+[00:00:00.929] Server  LOG      ✓ Ready in 645ms
+[00:00:04.026] Server  LOG      ○ Compiling /contact ...
+[00:00:04.440] Server  WARN     ⚠ metadataBase property in metadata export is not set for resolving social open graph or twitter images, using "http://localhost:3000". See https://nextjs.org/docs/app/api-reference/functions/generate-metadata#metadatabase
+[00:00:04.906] Browser INFO    %cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools font-weight:bold
+[00:15:21.675] Browser WARN    Detected `scroll-behavior: smooth` on the `<html>` element. To disable smooth scrolling during route transitions, add `data-scroll-behavior="smooth"` to your <html> element. Learn more: https://nextjs.org/docs/messages/missing-data-scroll-behavior
+[00:15:22.487] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-document.jpg" "received" null
+[00:15:22.504] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-chatbot.jpg" "received" null
+[00:15:22.505] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-agents.jpg" "received" null
+[00:15:48.368] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/testimonials/testimonial-emily.jpg" "received" null
+[00:15:52.307] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/testimonials/testimonial-sarah.jpg" "received" null
+[00:15:57.345] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/testimonials/testimonial-michael.jpg" "received" null
+[00:15:58.877] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-retail.jpg" "received" null
+[00:15:58.879] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-finance.jpg" "received" null
+[00:15:58.952] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-healthcare.jpg" "received" null
+[00:15:58.963] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-manufacturing.jpg" "received" null
+[00:16:04.464] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-finance.jpg" "received" null
+[00:16:05.591] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-healthcare.jpg" "received" null
+[00:16:06.410] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/case-studies/case-study-manufacturing.jpg" "received" null
+[00:16:21.398] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/office.jpg" "received" null
+[00:16:35.418] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-chatbot.jpg" "received" null
+[00:16:35.469] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-document.jpg" "received" null
+[00:16:35.480] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-agents.jpg" "received" null
+[00:17:13.068] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-chatbot.jpg" "received" null
+[00:17:13.126] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-document.jpg" "received" null
+[00:17:13.128] Server  ERROR    ⨯ "The requested resource isn't a valid image for" "/images/services/service-agents.jpg" "received" null

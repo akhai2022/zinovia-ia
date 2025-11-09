@@ -1,0 +1,31 @@
+project_id  = "your-project-id"
+region      = "europe-west1"
+environment = "prod"
+
+domain_name        = "example.com"
+additional_domains = ["www.example.com"]
+
+frontend_services = [
+  {
+    name          = "web-frontend"
+    image         = "europe-west1-docker.pkg.dev/your-project/zinovia-frontend/web-frontend:latest"
+    min_instances = 1
+    max_instances = 20
+    concurrency   = 80
+    env_vars = {
+      APP_ENV = "production"
+    }
+    secrets = [
+      {
+        env_name = "SOME_API_KEY"
+        secret   = "projects/your-project/secrets/some-api-key"
+        version  = "latest"
+      }
+    ]
+  }
+]
+
+monitoring_notification_channels = [
+  "projects/your-project/notificationChannels/0000000000000000000"
+]
+

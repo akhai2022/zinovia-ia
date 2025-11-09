@@ -1,0 +1,16 @@
+{
+  "registrantContact": {
+    "email": "a.khai@outlook.fr,khouiy.adam@gmail.com",
+    "phoneNumber": "+33-6-05-73-20-50",
+    "postalAddress": {
+      "regionCode": "FR",
+      "postalCode": "75001",
+      "administrativeArea": "IDF",
+      "locality": "Paris",
+      "addressLines": ["1 Rue "]
+    }
+  },
+  "adminContact": {"email":"a.khai@outlook.fr, khouiy.adam@gmail.com"},
+  "technicalContact": {"email":"a.khai @outlook.fr, khouiy.adam@gmail.com"},
+  "privacy": "PRIVATE_CONTACT_DATA"
+}

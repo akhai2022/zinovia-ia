@@ -1,0 +1,49 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./zinovia-backend
+      dockerfile: Dockerfile
+    container_name: zinovia-backend-dev
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./zinovia.db
+      - ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+      - EMAIL_ENABLED=false
+      - ENVIRONMENT=development
+    volumes:
+      - ./zinovia-backend:/app
+      - ./zinovia-backend/zinovia.db:/app/zinovia.db
+    command: uvicorn main:app --reload --host 0.0.0.0 --port 8000
+    restart: unless-stopped
+    networks:
+      - zinovia-network
+
+  frontend:
+    build:
+      context: ./zinovia-frontend
+      dockerfile: Dockerfile.dev
+    container_name: zinovia-frontend-dev
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+      - WATCHPACK_POLLING=true
+    volumes:
+      - ./zinovia-frontend:/app
+      - /app/node_modules
+      - /app/.next
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - zinovia-network
+
+networks:
+  zinovia-network:
+    driver: bridge
+

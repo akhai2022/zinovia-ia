@@ -1,0 +1,55 @@
+version: '3.8'
+
+services:
+  backend:
+    build:
+      context: ./zinovia-backend
+      dockerfile: Dockerfile
+    container_name: zinovia-backend
+    ports:
+      - "8000:8000"
+    environment:
+      - DATABASE_URL=sqlite:///./zinovia.db
+      - ALLOWED_ORIGINS=http://localhost:3000,http://frontend:3000
+      - EMAIL_ENABLED=false
+      - ENVIRONMENT=production
+    volumes:
+      - ./zinovia-backend/zinovia.db:/app/zinovia.db
+      - ./zinovia-backend/.env:/app/.env
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "python -c 'import urllib.request; urllib.request.urlopen(\"http://localhost:8000/api/v1/health\")'"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - zinovia-network
+
+  frontend:
+    build:
+      context: ./zinovia-frontend
+      dockerfile: Dockerfile
+    container_name: zinovia-frontend
+    ports:
+      - "3000:3000"
+    environment:
+      - NODE_ENV=production
+      - NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+      - NEXT_PUBLIC_SITE_URL=http://localhost:3000
+    depends_on:
+      - backend
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "wget --quiet --tries=1 --spider http://localhost:3000 || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    networks:
+      - zinovia-network
+
+networks:
+  zinovia-network:
+    driver: bridge
+

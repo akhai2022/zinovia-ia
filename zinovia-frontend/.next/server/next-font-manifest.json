@@ -1,0 +1,79 @@
+{
+  "app": {
+    "[project]/app/_not-found/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/about/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/case-studies/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/contact/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/agents/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/chatbots/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/document-intelligence/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/integrations/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/platform/security/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/pricing/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/resources/ai-maturity-assessment/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/resources/blog/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/resources/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/resources/webinars/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/resources/whitepapers/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/services/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/ecommerce/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/finance/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/healthcare/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/legal/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/manufacturing/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ],
+    "[project]/app/solutions/page": [
+      "static/media/83afe278b6a6bb3c.p.3a6ba036.woff2"
+    ]
+  },
+  "appUsingSizeAdjust": false,
+  "pages": {},
+  "pagesUsingSizeAdjust": false
+}
