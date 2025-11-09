@@ -84,12 +84,12 @@ resource "google_secret_manager_secret_iam_member" "service_access" {
 resource "google_cloud_run_v2_service" "this" {
   for_each = local.services
 
-  name        = each.value.name
-  location    = var.region
-  project     = var.project_id
-  ingress     = each.value.ingress
-  labels      = merge({ managed_by = "terraform" }, each.value.labels)
-  annotations = each.value.annotations
+  name                = each.value.name
+  location            = var.region
+  project             = var.project_id
+  ingress             = each.value.ingress
+  labels              = merge({ managed_by = "terraform" }, each.value.labels)
+  annotations         = each.value.annotations
   deletion_protection = false
 
   template {

@@ -111,6 +111,53 @@ module "database" {
 }
 
 locals {
+  llm_service_list = var.llm_service == null ? [] : [
+    merge(
+      {
+        name  = var.llm_service.name
+        image = var.llm_service.image
+      },
+      try(var.llm_service.cpu, null) != null ? { cpu = var.llm_service.cpu } : {},
+      try(var.llm_service.memory, null) != null ? { memory = var.llm_service.memory } : {},
+      try(var.llm_service.min_instances, null) != null ? { min_instances = var.llm_service.min_instances } : {},
+      try(var.llm_service.max_instances, null) != null ? { max_instances = var.llm_service.max_instances } : {},
+      try(var.llm_service.concurrency, null) != null ? { concurrency = var.llm_service.concurrency } : {},
+      try(var.llm_service.timeout_seconds, null) != null ? { timeout_seconds = var.llm_service.timeout_seconds } : {},
+      try(var.llm_service.ingress, null) != null ? { ingress = var.llm_service.ingress } : {},
+      try(var.llm_service.annotations, null) != null ? { annotations = var.llm_service.annotations } : {},
+      try(var.llm_service.labels, null) != null ? { labels = var.llm_service.labels } : {},
+      try(var.llm_service.execution_environment, null) != null ? { execution_environment = var.llm_service.execution_environment } : {},
+      try(var.llm_service.vpc_connector_egress, null) != null ? { vpc_connector_egress = var.llm_service.vpc_connector_egress } : {},
+      try(var.llm_service.additional_roles, null) != null ? { additional_roles = var.llm_service.additional_roles } : {},
+      {
+        env_vars = merge(
+          {
+            OLLAMA_MODEL = try(var.llm_service.model, "llama3.2")
+          },
+          try(var.llm_service.env_vars, {})
+        )
+      },
+      {
+        secrets = try(var.llm_service.secrets, [])
+      }
+    )
+  ]
+}
+
+module "cloud_run_llm" {
+  count = length(local.llm_service_list) == 0 ? 0 : 1
+
+  source = "./modules/cloud_run"
+
+  project_id                 = var.project_id
+  region                     = var.region
+  vpc_connector              = module.network.vpc_connector_id
+  services                   = local.llm_service_list
+  service_account_base_roles = var.service_account_base_roles
+  depends_on                 = [module.services]
+}
+
+locals {
   default_db_env = {
     DB_HOST            = module.database.instance_private_ip
     DB_NAME            = module.database.database_name
@@ -124,6 +171,8 @@ locals {
     secret   = module.database.db_password_secret_name
     version  = "latest"
   }
+
+  llm_service_url = var.llm_service == null ? null : module.cloud_run_llm[0].service_urls[var.llm_service.name]
 
   service_map = {
     for svc in var.frontend_services :
@@ -151,7 +200,12 @@ locals {
               DB_PORT = try(svc.db_port, null) != null ? svc.db_port : "5432"
             }
           ) : {},
-          try(svc.env_vars, {})
+          try(svc.env_vars, {}),
+          (
+            try(svc.use_llm_service, false) && local.llm_service_url != null
+            ? { LLM_API_BASE_URL = local.llm_service_url }
+            : {}
+          )
         )
       },
       {
@@ -191,7 +245,7 @@ module "cloud_run" {
   vpc_connector              = module.network.vpc_connector_id
   services                   = local.frontend_services
   service_account_base_roles = var.service_account_base_roles
-  depends_on                 = [module.services]
+  depends_on                 = concat([module.services], length(local.llm_service_list) == 0 ? [] : [module.cloud_run_llm[0]])
 }
 
 locals {

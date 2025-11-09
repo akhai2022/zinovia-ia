@@ -5,6 +5,22 @@ environment = "prod"
 domain_name        = "example.com"
 additional_domains = ["www.example.com"]
 
+llm_service = {
+  name          = "ollama-llm"
+  image         = "europe-west1-docker.pkg.dev/your-project/backend/zinovia-ollama:latest"
+  model         = "llama3.2"
+  cpu           = "4"
+  memory        = "16Gi"
+  min_instances = 0
+  max_instances = 1
+  concurrency   = 1
+  timeout_seconds = 600
+  ingress         = "INGRESS_TRAFFIC_INTERNAL_ONLY"
+  env_vars = {
+    OLLAMA_KEEP_ALIVE = "5m"
+  }
+}
+
 frontend_services = [
   {
     name          = "web-frontend"
@@ -12,8 +28,11 @@ frontend_services = [
     min_instances = 1
     max_instances = 20
     concurrency   = 80
+    use_llm_service = true
     env_vars = {
       APP_ENV = "production"
+      LLM_API_PATH   = "/api/chat"
+      LLM_MODEL_NAME = "llama3.2"
     }
     secrets = [
       {

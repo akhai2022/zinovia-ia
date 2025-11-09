@@ -150,6 +150,34 @@ variable "service_account_base_roles" {
   ]
 }
 
+variable "llm_service" {
+  description = "Optional configuration for a dedicated LLM Cloud Run service (e.g., Ollama)."
+  type = object({
+    name            = string
+    image           = string
+    model           = optional(string, "llama3.2")
+    cpu             = optional(string, "4")
+    memory          = optional(string, "16Gi")
+    min_instances   = optional(number, 0)
+    max_instances   = optional(number, 1)
+    concurrency     = optional(number, 1)
+    timeout_seconds = optional(number, 600)
+    ingress         = optional(string, "INGRESS_TRAFFIC_INTERNAL_ONLY")
+    env_vars        = optional(map(string), {})
+    secrets = optional(list(object({
+      env_name = string
+      secret   = string
+      version  = optional(string, "latest")
+    })), [])
+    annotations           = optional(map(string), {})
+    labels                = optional(map(string), {})
+    execution_environment = optional(string, "EXECUTION_ENVIRONMENT_GEN2")
+    vpc_connector_egress  = optional(string, "PRIVATE_RANGES_ONLY")
+    additional_roles      = optional(set(string), [])
+  })
+  default = null
+}
+
 variable "db_instance_name" {
   description = "Name of the Cloud SQL instance."
   type        = string

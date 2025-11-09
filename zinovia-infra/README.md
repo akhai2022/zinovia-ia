@@ -28,7 +28,8 @@ Copy `terraform.tfvars.example` to an environment-specific file (e.g. `dev.tfvar
 
 - `project_id` and `region`.
 - `domain_name` and `additional_domains` for SSL SANs (must be valid DNS names that you own).
-- `frontend_services` list with container images and scaling preferences.
+- `llm_service` block if you want Terraform to provision an Ollama Cloud Run instance.
+- `frontend_services` list with container images, scaling preferences, and service-specific environment variables (e.g. chatbot `LLM_*` settings and `NEXT_PUBLIC_CHAT_API_URL` for the frontend).
 - Optional VPC subnet CIDRs, firewall rules, or Cloud SQL sizing.
 - `monitoring_notification_channels` (IDs from Cloud Monitoring).
 
@@ -68,6 +69,14 @@ terraform apply -var-file="prod.tfvars"
 - The database password secret (`DB_PASSWORD`) is added unless explicitly defined in the service definition.
 - Additional secrets can be mounted by specifying `env_name`, `secret`, and `version`.
 - Autoscaling settings (`min_instances`, `max_instances`, `concurrency`, `timeout_seconds`) are configurable per service.
+- When `llm_service` is defined, the backend service can set `use_llm_service = true` so Terraform injects the managed service URL into `LLM_API_BASE_URL`. Override `LLM_API_PATH` (for Ollama use `/api/chat`) and `LLM_MODEL_NAME` as needed.
+
+## Managed LLM Service (Ollama)
+
+- Provide a `llm_service` block to deploy the Ollama container to Cloud Run (include image tag, model name, and resource sizing).
+- The included Dockerfile expects the image to preload the requested model at startup (`OLLAMA_MODEL` env var).
+- Keep ingress restricted (`INGRESS_TRAFFIC_INTERNAL_ONLY`) so only other services in your project can reach it.
+- For production, allocate enough CPU/RAM and consider keeping at least one instance warm to avoid cold-start model pulls.
 
 ## DNS & HTTPS
 
