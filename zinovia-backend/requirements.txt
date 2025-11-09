@@ -1,9 +1,11 @@
 # FastAPI Backend Dependencies
 fastapi==0.109.0
 uvicorn[standard]==0.27.0
+httpx==0.26.0
 pydantic==2.5.3
 pydantic-settings==2.1.0
 pydantic[email]==2.5.3
+google-auth==2.36.0
 
 # Database
 sqlalchemy==2.0.25
@@ -29,4 +31,7 @@ slowapi==0.1.9
 
 # Logging (optional)
 structlog==24.1.0
+
+# Database migrations
+alembic==1.14.0
 
