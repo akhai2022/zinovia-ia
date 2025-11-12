@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import dynamic from "next/dynamic";
+import { ThemeProvider } from "@/app/theme/ThemeProvider";
 import { ToastProvider } from "@/components/ui";
 import { Header, Footer } from "@/components/layout";
 import ScrollProgress from "@/components/animations/ScrollProgress";
@@ -77,6 +78,14 @@ export const metadata: Metadata = {
   },
 };
 
+const NoFlash = () => (
+  <script
+    dangerouslySetInnerHTML={{
+      __html: `(function(){try{var stored=localStorage.getItem('theme');var sys=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';var mode=!stored||stored==='system'?sys:stored;var root=document.documentElement;root.dataset.theme=mode;if(mode==='dark'){root.classList.add('dark');}else{root.classList.remove('dark');}}catch(e){}})();`,
+    }}
+  />
+);
+
 export default function RootLayout({
   children,
 }: Readonly<{
@@ -85,8 +94,14 @@ export default function RootLayout({
   const organizationSchema = getOrganizationSchema();
 
   return (
-    <html lang="en" className="scroll-smooth">
+    <html
+      lang="en"
+      className="scroll-smooth"
+      data-theme="light"
+      suppressHydrationWarning
+    >
       <head>
+        <NoFlash />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{
@@ -94,14 +109,16 @@ export default function RootLayout({
           }}
         />
       </head>
-      <body className={`${inter.variable} font-sans antialiased`}>
-        <ToastProvider>
-          <ScrollProgress />
-          <Header />
-          <main>{children}</main>
-          <Footer />
-          <FloatingChat />
-        </ToastProvider>
+      <body className={`${inter.variable} font-sans antialiased theme-transition bg-bg text-text`}>
+        <ThemeProvider>
+          <ToastProvider>
+            <ScrollProgress />
+            <Header />
+            <main>{children}</main>
+            <Footer />
+            <FloatingChat />
+          </ToastProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

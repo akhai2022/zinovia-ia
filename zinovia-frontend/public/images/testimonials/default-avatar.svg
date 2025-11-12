@@ -1,0 +1,26 @@
+<svg width="160" height="160" viewBox="0 0 160 160" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="avatarGradient" x1="0" y1="0" x2="160" y2="160" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#5BF5FF" />
+      <stop offset="1" stop-color="#8E54FF" />
+    </linearGradient>
+  </defs>
+  <rect width="160" height="160" rx="80" fill="url(#avatarGradient)" opacity="0.15" />
+  <circle cx="80" cy="64" r="32" fill="#0F172A" opacity="0.75" />
+  <path
+    d="M40 126c0-22.091 17.909-40 40-40s40 17.909 40 40"
+    stroke="#0F172A"
+    stroke-opacity="0.35"
+    stroke-width="12"
+    stroke-linecap="round"
+  />
+  <circle cx="80" cy="64" r="24" fill="white" fill-opacity="0.85" />
+  <path
+    d="M52 124c4.5-18.5 15-30 28-30s23.5 11.5 28 30"
+    stroke="white"
+    stroke-opacity="0.75"
+    stroke-width="10"
+    stroke-linecap="round"
+  />
+</svg>
+

@@ -6,9 +6,6 @@ import dynamic from "next/dynamic";
 const HowItWorks = dynamic(() => import("@/components/sections/HowItWorks"), {
   loading: () => <div className="min-h-[400px]" />,
 });
-const Stats = dynamic(() => import("@/components/sections/Stats"), {
-  loading: () => <div className="min-h-[300px]" />,
-});
 const Testimonials = dynamic(() => import("@/components/sections/Testimonials"), {
   loading: () => <div className="min-h-[400px]" />,
 });
@@ -23,9 +20,6 @@ export default function HomePage() {
       <Services />
       <Suspense fallback={<div className="min-h-[400px]" />}>
         <HowItWorks />
-      </Suspense>
-      <Suspense fallback={<div className="min-h-[300px]" />}>
-        <Stats />
       </Suspense>
       <Suspense fallback={<div className="min-h-[400px]" />}>
         <Testimonials />

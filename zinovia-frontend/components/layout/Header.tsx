@@ -5,7 +5,8 @@ import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
-import { Menu, X, ChevronDown, MessageCircle } from "lucide-react";
+import { Menu, X, ChevronDown, MessageCircle, Moon, Sun, Monitor } from "lucide-react";
+import { useTheme } from "@/app/theme/ThemeProvider";
 import { navigation } from "@/lib/constants";
 import { cn } from "@/lib/utils";
 import Button from "@/components/ui/Button";
@@ -15,6 +16,7 @@ const Header: React.FC = () => {
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const pathname = usePathname();
+  const { resolved, theme, setTheme, toggleTheme } = useTheme();
 
   const solutionsMenu = [
     { name: "Healthcare", href: "/solutions/healthcare" },
@@ -53,8 +55,8 @@ const Header: React.FC = () => {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
         isScrolled
-          ? "bg-white/95 backdrop-blur-md shadow-sm border-b border-neutral-border"
-          : "bg-white"
+          ? "bg-card/90 backdrop-blur-md shadow-sm border-b border-border"
+          : "bg-card/70 backdrop-blur"
       )}
       initial={{ y: -100 }}
       animate={{ y: 0 }}
@@ -65,11 +67,11 @@ const Header: React.FC = () => {
           <Link href="/" className="flex items-center space-x-3">
             <motion.div whileHover={{ scale: 1.05 }}>
               <Image
-                src="/logo.svg"
+                src="/images/logo/Zinovia_1.png"
                 alt="Zinovia Logo"
-                width={120}
+                width={140}
                 height={40}
-                className="h-8 w-auto"
+                className="h-10 w-auto object-contain"
                 priority
               />
               <span className="text-2xl font-bold text-primary-navy sr-only">
@@ -93,7 +95,7 @@ const Header: React.FC = () => {
                     onMouseEnter={() => setActiveDropdown(item.name)}
                     onMouseLeave={() => setActiveDropdown(null)}
                   >
-                    <button className="flex items-center gap-1 text-sm font-medium transition-colors duration-300 text-neutral-text-secondary hover:text-primary-navy">
+                    <button className="flex items-center gap-1 text-sm font-medium transition-colors duration-300 text-text-muted hover:text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-ring rounded-md px-1 py-1">
                       {item.name}
                       <ChevronDown className="h-4 w-4" />
                     </button>
@@ -105,13 +107,13 @@ const Header: React.FC = () => {
                           animate={{ opacity: 1, y: 0 }}
                           exit={{ opacity: 0, y: 10 }}
                           transition={{ duration: 0.2 }}
-                          className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-lg border border-neutral-border py-2 z-50"
+                          className="absolute top-full left-0 mt-2 w-56 rounded-xl border border-border bg-card/95 shadow-lg backdrop-blur-md py-2 z-50"
                         >
                           {menuItems.map((menuItem) => (
                             <Link
                               key={menuItem.name}
                               href={menuItem.href}
-                              className="block px-4 py-2 text-sm text-neutral-text-secondary hover:bg-neutral-bg-light hover:text-primary-navy transition-colors"
+                              className="block px-4 py-2 text-sm text-text-muted hover:bg-bg-muted/70 hover:text-text transition-colors rounded-lg"
                             >
                               {menuItem.name}
                             </Link>
@@ -128,16 +130,16 @@ const Header: React.FC = () => {
                   key={item.name}
                   href={item.href}
                   className={cn(
-                    "relative text-sm font-medium transition-colors duration-300",
+                    "relative text-sm font-medium transition-colors duration-300 px-1 py-1 rounded-md",
                     isActive(item.href)
-                      ? "text-primary-navy"
-                      : "text-neutral-text-secondary hover:text-primary-navy"
+                      ? "text-text"
+                      : "text-text-muted hover:text-text focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
                   )}
                 >
                   {item.name}
                   {isActive(item.href) && (
                     <motion.div
-                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-primary-navy"
+                      className="absolute -bottom-1 left-0 right-0 h-0.5 bg-brand"
                       layoutId="activeIndicator"
                       transition={{ duration: 0.3 }}
                     />
@@ -149,7 +151,18 @@ const Header: React.FC = () => {
 
           {/* Desktop CTA */}
           <div className="hidden md:flex items-center gap-4">
-            <Link href="/contact" className="flex items-center gap-2 text-sm font-medium text-primary-navy hover:text-primary-blue transition-colors">
+            <button
+              onClick={toggleTheme}
+              className="flex items-center gap-1 rounded-xl border border-border bg-card px-3 py-2 text-sm font-medium text-text shadow-sm transition-colors hover:bg-bg-muted/60 focus:outline-none focus-visible:ring-2 focus-visible:ring-ring"
+              aria-label="Toggle color theme"
+            >
+              {resolved === "dark" ? <Moon className="h-4 w-4" /> : <Sun className="h-4 w-4" />}
+              <span className="hidden lg:inline">{resolved === "dark" ? "Dark" : "Light"}</span>
+            </button>
+            <Link
+              href="/contact"
+              className="flex items-center gap-2 text-sm font-medium text-text hover:text-brand transition-colors"
+            >
               <MessageCircle className="h-4 w-4" />
               Chat with Expert
             </Link>
@@ -160,7 +173,7 @@ const Header: React.FC = () => {
 
           {/* Mobile Menu Button */}
           <button
-            className="md:hidden p-2 text-gray-700 hover:text-blue-600 transition-colors"
+            className="md:hidden rounded-lg p-2 text-text hover:bg-bg-muted focus:outline-none focus-visible:ring-2 focus-visible:ring-ring transition-colors"
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
             aria-label="Toggle menu"
           >
@@ -177,7 +190,7 @@ const Header: React.FC = () => {
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            className="md:hidden bg-white border-t border-neutral-border"
+            className="md:hidden border-t border-border bg-card/95 backdrop-blur"
             initial={{ height: 0, opacity: 0 }}
             animate={{ height: "auto", opacity: 1 }}
             exit={{ height: 0, opacity: 0 }}
@@ -190,15 +203,56 @@ const Header: React.FC = () => {
                   href={item.href}
                   onClick={() => setIsMobileMenuOpen(false)}
                   className={cn(
-                    "block py-2 text-base font-medium transition-colors",
+                    "block rounded-lg px-2 py-2 text-base font-medium transition-colors",
                     isActive(item.href)
-                      ? "text-primary-navy"
-                      : "text-neutral-text-secondary hover:text-primary-navy"
+                      ? "bg-bg-muted/70 text-text"
+                      : "text-text-muted hover:bg-bg-muted/60 hover:text-text"
                   )}
                 >
                   {item.name}
                 </Link>
               ))}
+              <div className="flex items-center gap-3 rounded-lg bg-bg-muted/60 px-3 py-3">
+                <span className="text-sm font-medium text-text">Theme</span>
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => setTheme("light")}
+                    className={cn(
+                      "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      theme === "light"
+                        ? "border-brand bg-brand/10 text-text"
+                        : "border-border text-text-muted hover:text-text"
+                    )}
+                  >
+                    <Sun className="h-3.5 w-3.5" />
+                    Light
+                  </button>
+                  <button
+                    onClick={() => setTheme("dark")}
+                    className={cn(
+                      "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      theme === "dark"
+                        ? "border-brand bg-brand/10 text-text"
+                        : "border-border text-text-muted hover:text-text"
+                    )}
+                  >
+                    <Moon className="h-3.5 w-3.5" />
+                    Dark
+                  </button>
+                  <button
+                    onClick={() => setTheme("system")}
+                    className={cn(
+                      "flex items-center gap-1 rounded-lg border px-2 py-1 text-xs font-medium focus:outline-none focus-visible:ring-2 focus-visible:ring-ring",
+                      theme === "system"
+                        ? "border-brand bg-brand/10 text-text"
+                        : "border-border text-text-muted hover:text-text"
+                    )}
+                  >
+                    <Monitor className="h-3.5 w-3.5" />
+                    Auto
+                  </button>
+                </div>
+              </div>
               <Link href="/contact" onClick={() => setIsMobileMenuOpen(false)}>
                 <Button variant="primary" className="w-full mt-4">
                   Get Started

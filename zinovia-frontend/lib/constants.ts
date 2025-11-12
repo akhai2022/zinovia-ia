@@ -16,11 +16,23 @@ export const navigation = [
 ];
 
 export const heroContent = {
-  headline: "Transform Your Business with Intelligent AI Solutions",
+  tagline: "Enterprise AI, Delivered Fast",
+  headline: "Deploy enterprise AI in under 24 hours.",
   subheading:
-    "We build custom AI agents, chatbots, and automation systems that work 24/7 to streamline your operations and delight your customers.",
-  ctaPrimary: "Get Started Free",
-  ctaSecondary: "View Our Work",
+    "Zinovia.ai delivers 2.5× ROI with 500+ successful deployments and SOC 2 / HIPAA compliant infrastructure.",
+  primaryAction: {
+    label: "Schedule a Consultation",
+    href: "/contact?intent=consultation",
+  },
+  secondaryAction: {
+    label: "Start 14-Day Trial",
+    href: "/pricing",
+  },
+  stats: [
+    { label: "Go-live", value: "< 24h", description: "From strategy to production" },
+    { label: "ROI", value: "2.5×", description: "Average return in year one" },
+    { label: "Success", value: "500+", description: "Enterprise deployments" },
+  ],
 };
 
 export const services = [

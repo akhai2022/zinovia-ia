@@ -1,9 +1,33 @@
 import React from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { Linkedin, Twitter, Github, Mail, Phone } from "lucide-react";
+import { Linkedin, Twitter, Github } from "lucide-react";
 import { navigation, companyInfo } from "@/lib/constants";
 import Container from "./Container";
+
+const solutionLinks = [
+  { name: "Healthcare", href: "/solutions/healthcare" },
+  { name: "Finance", href: "/solutions/finance" },
+  { name: "E-commerce", href: "/solutions/ecommerce" },
+  { name: "Legal", href: "/solutions/legal" },
+  { name: "Manufacturing", href: "/solutions/manufacturing" },
+];
+
+const resourceLinks = [
+  { name: "Blog", href: "/resources/blog" },
+  { name: "Webinars", href: "/resources/webinars" },
+  { name: "Whitepapers", href: "/resources/whitepapers" },
+  { name: "ROI Calculator", href: "/resources/ai-maturity-assessment" },
+  { name: "Security & Compliance", href: "/platform/security" },
+];
+
+const servicesLinks = [
+  { name: "AI Consulting", href: "/services/ai-consulting" },
+  { name: "Data Integration", href: "/services/data-integration" },
+  { name: "Cloud & DevOps", href: "/services/cloud-devops" },
+  { name: "App Development", href: "/services/app-development" },
+  { name: "Support & Training", href: "/services/training" },
+];
 
 const Footer: React.FC = () => {
   const currentYear = new Date().getFullYear();
@@ -12,7 +36,7 @@ const Footer: React.FC = () => {
     <footer className="bg-primary-navy text-white">
       <Container>
         <div className="py-12 md:py-16">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-8">
             {/* Company Info */}
             <div className="space-y-4">
               <Image
@@ -59,7 +83,6 @@ const Footer: React.FC = () => {
               </div>
             </div>
 
-            {/* Quick Links */}
             <div>
               <h4 className="text-white font-semibold mb-4">Quick Links</h4>
               <ul className="space-y-2">
@@ -76,97 +99,51 @@ const Footer: React.FC = () => {
               </ul>
             </div>
 
-            {/* Solutions */}
             <div>
-              <h4 className="text-white font-semibold mb-4">Solutions</h4>
+              <h4 className="text-white font-semibold mb-4">Services</h4>
               <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/solutions/healthcare"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Healthcare
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/solutions/finance"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Finance
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/solutions/ecommerce"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    E-commerce
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/platform"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Platform
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/pricing"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Pricing
-                  </Link>
-                </li>
+                {servicesLinks.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
 
-            {/* Resources & More */}
+            <div>
+              <h4 className="text-white font-semibold mb-4">Solutions</h4>
+              <ul className="space-y-2">
+                {solutionLinks.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
             <div>
               <h4 className="text-white font-semibold mb-4">Resources</h4>
               <ul className="space-y-2">
-                <li>
-                  <Link
-                    href="/resources/blog"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Blog
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/resources/webinars"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Webinars
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/resources/whitepapers"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Whitepapers
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/resources"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    ROI Calculator
-                  </Link>
-                </li>
-                <li>
-                  <Link
-                    href="/platform/security"
-                    className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
-                  >
-                    Security & Compliance
-                  </Link>
-                </li>
+                {resourceLinks.map((item) => (
+                  <li key={item.name}>
+                    <Link
+                      href={item.href}
+                      className="text-sm text-neutral-text-secondary hover:text-white transition-colors"
+                    >
+                      {item.name}
+                    </Link>
+                  </li>
+                ))}
               </ul>
             </div>
           </div>
