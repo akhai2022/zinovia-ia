@@ -49,12 +49,12 @@ function getRuntimeConfig(): RuntimeConfig {
   return globalThis.__ZINOVIA_RUNTIME__ || computeServerRuntimeConfig();
 }
 
-function getApiBaseUrl(): string {
+export function getApiBaseUrl(): string {
   const runtime = getRuntimeConfig();
   return runtime.apiBaseUrl || DEFAULT_API_BASE_URL;
 }
 
-function getChatBaseUrl(): string {
+export function getChatBaseUrl(): string {
   const runtime = getRuntimeConfig();
   if (runtime.chatApiUrl) {
     return runtime.chatApiUrl;
@@ -156,7 +156,7 @@ export async function sendChatMessage(
   payload: ChatRequestPayload
 ): Promise<ChatResponsePayload> {
   try {
-    const response = await fetch(`${getChatBaseUrl()}/chat`, {
+    const response = await fetch(`/api/chat`, {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
