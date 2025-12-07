@@ -10,10 +10,10 @@ import { FadeIn } from "@/components/animations";
 const industries = ["All", "Retail", "Finance", "Healthcare", "Manufacturing"];
 
 const caseStudyImageMap: Record<number, string> = {
-  1: "/images/case-studies/case-study-retail.jpg",
-  2: "/images/case-studies/case-study-finance.jpg",
-  3: "/images/case-studies/case-study-healthcare.jpg",
-  4: "/images/case-studies/case-study-manufacturing.jpg",
+  1: "/images/case-studies/case-study-retail.svg",
+  2: "/images/case-studies/case-study-finance.svg",
+  3: "/images/case-studies/case-study-healthcare.svg",
+  4: "/images/case-studies/case-study-manufacturing.svg",
 };
 
 export default function CaseStudiesPage() {

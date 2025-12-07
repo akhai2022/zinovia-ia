@@ -112,12 +112,21 @@ export async function submitContactForm(
 
     if (!response.ok) {
       const errorData = await response.json().catch(() => ({}));
-      throw new Error(errorData.message || "Failed to submit contact form");
+      // FastAPI returns errors with 'detail' field, not 'message'
+      const errorMessage = errorData.detail || errorData.message || `Failed to submit contact form (${response.status})`;
+      throw new Error(errorMessage);
     }
 
-    return await response.json();
+    const result = await response.json();
+    // Backend returns ContactResponse with success, message, and contact_id
+    // This matches ApiResponse format, so return as-is
+    return result;
   } catch (error) {
     console.error("Contact form submission error:", error);
+    // Re-throw with a more user-friendly message if it's a network error
+    if (error instanceof TypeError && error.message.includes("fetch")) {
+      throw new Error("Unable to connect to server. Please check your connection and try again.");
+    }
     throw error;
   }
 }

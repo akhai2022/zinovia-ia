@@ -1,0 +1,17 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice">
+  <defs>
+    <linearGradient id="retailGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0ea5e9"/>
+      <stop offset="100%" stop-color="#6366f1"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M40 0H0V40" fill="none" stroke="rgba(255,255,255,0.15)" stroke-width="1"/>
+    </pattern>
+  </defs>
+  <rect width="1200" height="800" fill="url(#retailGradient)"/>
+  <rect width="1200" height="800" fill="url(#grid)"/>
+  <text x="50%" y="50%" font-family="Inter, sans-serif" font-weight="600" font-size="72" fill="rgba(255,255,255,0.9)" text-anchor="middle" dominant-baseline="middle">
+    Retail Success
+  </text>
+</svg>
+

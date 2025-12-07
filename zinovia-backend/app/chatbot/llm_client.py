@@ -1,3 +1,4 @@
+import asyncio
 import logging
 from abc import ABC, abstractmethod
 from typing import Any, Dict, List, Optional
@@ -23,12 +24,14 @@ class OpenAICompatibleLLMClient(BaseLLMClient):
         model_name: str,
         api_key: Optional[str] = None,
         timeout_seconds: float = 15.0,
+        identity_audience: Optional[str] = None,
     ) -> None:
         self._base_url = base_url.rstrip("/")
         self._api_path = api_path if api_path.startswith("/") else f"/{api_path}"
         self._model_name = model_name
         self._api_key = api_key
         self._timeout = timeout_seconds
+        self._identity_audience = identity_audience
 
     async def chat(self, system_prompt: str, messages: List[Dict[str, str]]) -> str:
         payload = {
@@ -38,6 +41,9 @@ class OpenAICompatibleLLMClient(BaseLLMClient):
         headers: Dict[str, str] = {"Content-Type": "application/json"}
         if self._api_key:
             headers["Authorization"] = f"Bearer {self._api_key}"
+
+        auth_headers = await self._build_identity_headers()
+        headers.update(auth_headers)
 
         api_path = self._api_path
         if self._base_url.endswith("/v1") and api_path.startswith("/v1/"):
@@ -71,4 +77,33 @@ class OpenAICompatibleLLMClient(BaseLLMClient):
                 status_code=status.HTTP_502_BAD_GATEWAY,
                 detail="Invalid response from language model service.",
             ) from exc
+
+    async def _build_identity_headers(self) -> Dict[str, str]:
+        if not self._identity_audience:
+            return {}
+
+        def _blocking_fetch() -> str:
+            try:
+                from google.auth.transport.requests import Request
+                from google.oauth2 import id_token
+            except ImportError as exc:  # pragma: no cover - defensive
+                logger.error("google-auth library is required for identity tokens")
+                raise HTTPException(
+                    status_code=status.HTTP_500_INTERNAL_SERVER_ERROR,
+                    detail="Server is missing google-auth dependency required for identity tokens.",
+                ) from exc
+
+            request = Request()
+            try:
+                return id_token.fetch_id_token(request, self._identity_audience)
+            except Exception as exc:  # pragma: no cover
+                logger.exception("Failed to fetch identity token for audience %s", self._identity_audience)
+                raise HTTPException(
+                    status_code=status.HTTP_502_BAD_GATEWAY,
+                    detail="Unable to authenticate with language model service.",
+                ) from exc
+
+        loop = asyncio.get_running_loop()
+        token = await loop.run_in_executor(None, _blocking_fetch)
+        return {"Authorization": f"Bearer {token}"}
 

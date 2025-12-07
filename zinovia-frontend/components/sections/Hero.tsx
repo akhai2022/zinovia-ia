@@ -1,9 +1,10 @@
 "use client";
 
-import React from "react";
+import React, { useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { motion } from "framer-motion";
+import { useTheme } from "@/app/theme/ThemeProvider";
 import { ChevronDown, ArrowRight } from "lucide-react";
 import { heroContent } from "@/lib/constants";
 import { fadeInUp } from "@/lib/animations";
@@ -12,6 +13,13 @@ import AnimatedText from "@/components/animations/AnimatedText";
 import Container from "@/components/layout/Container";
 
 const Hero: React.FC = () => {
+  const { resolved } = useTheme();
+  
+  // Use dark logo in dark mode, light logo in light mode
+  const logoSrc = useMemo(() => {
+    return resolved === "dark" ? "/logo-dark.svg" : "/logo.svg";
+  }, [resolved]);
+  
   const scrollToContent = () => {
     const element = document.getElementById("services");
     if (element) {
@@ -111,7 +119,7 @@ const Hero: React.FC = () => {
             <div className="relative z-10 space-y-6">
               <div className="flex items-center gap-3">
                 <Image
-                  src="/images/logo/Zinovia_1.png"
+                  src={logoSrc}
                   alt="Zinovia wordmark"
                   width={180}
                   height={64}

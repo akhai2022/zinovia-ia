@@ -203,7 +203,10 @@ locals {
           try(svc.env_vars, {}),
           (
             try(svc.use_llm_service, false) && local.llm_service_url != null
-            ? { LLM_API_BASE_URL = local.llm_service_url }
+            ? {
+              LLM_API_BASE_URL      = local.llm_service_url
+              LLM_IDENTITY_AUDIENCE = local.llm_service_url
+            }
             : {}
           )
         )
@@ -245,7 +248,7 @@ module "cloud_run" {
   vpc_connector              = module.network.vpc_connector_id
   services                   = local.frontend_services
   service_account_base_roles = var.service_account_base_roles
-  depends_on                 = concat([module.services], length(local.llm_service_list) == 0 ? [] : [module.cloud_run_llm[0]])
+  depends_on                 = [module.services]
 }
 
 locals {

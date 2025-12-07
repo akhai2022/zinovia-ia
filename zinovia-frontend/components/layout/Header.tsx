@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -17,6 +17,11 @@ const Header: React.FC = () => {
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const pathname = usePathname();
   const { resolved, theme, setTheme, toggleTheme } = useTheme();
+  
+  // Use dark logo in dark mode, light logo in light mode
+  const logoSrc = useMemo(() => {
+    return resolved === "dark" ? "/logo-dark.svg" : "/logo.svg";
+  }, [resolved]);
 
   const solutionsMenu = [
     { name: "Healthcare", href: "/solutions/healthcare" },
@@ -67,7 +72,7 @@ const Header: React.FC = () => {
           <Link href="/" className="flex items-center space-x-3">
             <motion.div whileHover={{ scale: 1.05 }}>
               <Image
-                src="/images/logo/Zinovia_1.png"
+                src={logoSrc}
                 alt="Zinovia Logo"
                 width={140}
                 height={40}

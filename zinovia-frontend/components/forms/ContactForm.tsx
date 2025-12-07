@@ -40,7 +40,11 @@ const ContactForm: React.FC = () => {
       reset();
     } catch (error) {
       console.error("Contact form submission failed", error);
-      showToast("Something went wrong. Please try again.", "error");
+      // Show the actual error message if available, otherwise show generic message
+      const errorMessage = error instanceof Error 
+        ? error.message 
+        : "Something went wrong. Please try again.";
+      showToast(errorMessage, "error");
     }
   };
 

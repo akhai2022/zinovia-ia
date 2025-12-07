@@ -6,7 +6,7 @@ Python FastAPI backend for Zinovia AI Services website.
 
 ### Prerequisites
 
-- Python 3.10+
+- Python 3.11 (recommended) / 3.10+
 - pip (Python package manager)
 
 ### Installation
@@ -28,10 +28,22 @@ venv\Scripts\activate
 pip install -r requirements.txt
 ```
 
-3. **Set up environment variables:**
+3. **Set up environment variables (configure chatbot LLM endpoint):**
 ```bash
 cp .env.example .env
 # Edit .env with your configuration
+
+# Minimal environment variables for local chatbot testing
+export APP_ENV=dev
+export LLM_API_BASE_URL="http://localhost:11434"
+export LLM_MODEL_NAME="llama3"
+# Ollama exposes an OpenAI-compatible chat endpoint at /api/chat
+export LLM_API_PATH="/api/chat"
+# Optional extras:
+# export LLM_API_KEY="your-key-if-required"
+# export LLM_API_PATH="/v1/chat/completions"  # for OpenAI-style providers
+# export LLM_IDENTITY_AUDIENCE="https://<cloud-run-llm-url>"  # required when calling an auth-protected Cloud Run LLM
+# export DEBUG_MODE=true
 ```
 
 4. **Run the server:**
@@ -56,12 +68,20 @@ zinovia-backend/
 ├── app/
 │   ├── __init__.py
 │   ├── main.py              # FastAPI app initialization
+│   ├── chatbot/             # Onboarding chatbot modules
+│   │   ├── config.py        # Pydantic settings
+│   │   ├── llm_client.py    # OpenAI-compatible client
+│   │   ├── memory_store.py  # Ephemeral session store (temporary)
+│   │   ├── models.py        # Chat request/response models
+│   │   ├── services_descriptions.py  # Static service catalog
+│   │   └── state.py         # State machine & transitions
 │   ├── database.py          # Database configuration
 │   ├── models.py            # SQLAlchemy models
 │   ├── schemas.py           # Pydantic schemas
 │   ├── email_service.py     # Email notifications
 │   └── routers/             # API endpoints
 │       ├── __init__.py
+│       ├── chatbot.py       # POST /chat endpoint
 │       ├── health.py        # Health check
 │       ├── contact.py       # Contact form
 │       └── newsletter.py    # Newsletter subscription
@@ -80,6 +100,22 @@ zinovia-backend/
 #### Health Check
 ```
 GET /api/v1/health
+```
+
+#### Chatbot Conversation
+```
+POST /chat
+Body: {
+  "session_id": "d0c0892d-3e24-4fef-8f0f-9ef280ff0f01",
+  "message": "Hi there!"
+}
+Response: {
+  "reply": "...",
+  "session_id": "...",
+  "state": "ASK_USER_TYPE",
+  "finished": false,
+  "debug": {...} // only when DEBUG_MODE=true
+}
 ```
 
 #### Submit Contact Form
@@ -108,6 +144,21 @@ Body: {
   "email": "user@example.com"
 }
 ```
+
+---
+
+## 🤖 Chatbot Flow
+
+1. `GREETING` – welcome message and ask what brings the visitor here.
+2. `ASK_USER_TYPE` – capture whether they are an individual, small business, or enterprise.
+3. `ASK_GOAL` – understand the primary objective or challenge.
+4. `SHOW_SERVICES` – present service catalog and recommend a fit.
+5. `COLLECT_CONTACT_NAME` – request their name.
+6. `COLLECT_CONTACT_EMAIL` – request an email (basic validation only).
+7. `SUMMARY` – recap collected details and confirm follow-up.
+8. `DONE` – support additional questions without repeating onboarding.
+
+> ℹ️ Conversation state is stored in-memory for now. Cloud Run instances are ephemeral; plan to move this to Redis, Firestore, or another shared store for production.
 
 ---
 
@@ -155,12 +206,12 @@ ADMIN_EMAIL=admin@zinovia.com
 
 ## 🔗 Frontend Integration
 
-1. Update frontend `.env.local`:
-```env
-NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
-```
-
-2. The frontend forms will automatically connect to the backend when running.
+- Update frontend `.env.local`:
+  ```env
+  NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+  ```
+- The floating “Chat with Expert” widget should call `POST /chat` on this backend. Make sure the backend has `LLM_*` variables configured and reachable.
+- Restrict CORS origins in production (currently set to allow localhost by default).
 
 ---
 
@@ -185,6 +236,14 @@ NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
 ```bash
 # Test health endpoint
 curl http://localhost:8000/api/v1/health
+
+# Test chatbot endpoint (ensure LLM env vars are set and reachable)
+curl -X POST http://localhost:8000/chat \
+  -H "Content-Type: application/json" \
+  -d '{
+    "session_id": "123e4567-e89b-12d3-a456-426614174000",
+    "message": "Hello there"
+  }'
 
 # Test contact form
 curl -X POST http://localhost:8000/api/v1/contact \
@@ -213,7 +272,7 @@ WORKDIR /app
 COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 COPY . .
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8000"]
+CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
 ```
 
 ### Artifact Registry (via Makefile)
@@ -226,6 +285,14 @@ make backend-push BACKEND_IMAGE_TAG=dev          # build & push europe-west1-doc
 ```
 
 Override `BACKEND_REGISTRY_HOST`, `BACKEND_REGISTRY_REPO`, `BACKEND_IMAGE_NAME`, or `BACKEND_IMAGE_TAG` to match your registry naming convention.
+
+### Ollama LLM Image
+
+```bash
+make llm-push \
+  LLM_IMAGE_TAG=2025-11-09-llm \
+  LLM_REGISTRY_REPO=zinovia-ia/backend
+```
 
 ### Production Checklist
 - [ ] Set `ENVIRONMENT=production` in `.env`

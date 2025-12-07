@@ -40,11 +40,11 @@ const Footer: React.FC = () => {
             {/* Company Info */}
             <div className="space-y-4">
               <Image
-                src="/logo.svg"
+                src="/logo-dark.svg"
                 alt="Zinovia Logo"
                 width={140}
-                height={50}
-                className="h-10 w-auto brightness-0 invert"
+                height={40}
+                className="h-8 w-auto"
               />
               <h3 className="text-2xl font-bold text-white sr-only">
                 Zinovia

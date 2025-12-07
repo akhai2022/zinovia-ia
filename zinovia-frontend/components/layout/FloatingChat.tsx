@@ -178,7 +178,7 @@ const FloatingChat: React.FC = () => {
                   onKeyDown={handleKeyDown}
                   placeholder="Type your message..."
                   rows={2}
-                  className="w-full rounded-lg border border-neutral-border-light px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary-blue resize-none"
+                  className="w-full rounded-lg border border-neutral-border-light px-3 py-2 text-sm text-black placeholder:text-gray-400 focus:outline-none focus:ring-2 focus:ring-primary-blue resize-none"
                   disabled={disableInput}
                 />
                 <motion.button

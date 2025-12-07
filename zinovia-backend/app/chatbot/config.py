@@ -16,6 +16,11 @@ class Settings(BaseSettings):
         description="Relative path appended to LLM_API_BASE_URL. For OpenAI compatible APIs this is typically /v1/chat/completions.",
     )
     debug_mode: bool = Field(default=False, alias="DEBUG_MODE")
+    llm_identity_audience: Optional[str] = Field(
+        default=None,
+        alias="LLM_IDENTITY_AUDIENCE",
+        description="Optional audience for generating Google Cloud ID tokens when calling a protected Cloud Run LLM service.",
+    )
 
     class Config:
         env_file = ".env"

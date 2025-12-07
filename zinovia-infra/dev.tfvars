@@ -10,7 +10,7 @@ llm_service = null
 frontend_services = [
   {
     name            = "zinovia-frontend-dev"
-    image           = "europe-west1-docker.pkg.dev/zinovia-ia/frontend/zinovia-frontend:home-refresh-2025-11-12b"
+    image           = "europe-west1-docker.pkg.dev/zinovia-ia/frontend/zinovia-frontend:logo-improved-20251115-233956"
     min_instances   = 0
     max_instances   = 5
     concurrency     = 40

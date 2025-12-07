@@ -30,11 +30,12 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           type={type}
           className={cn(
             "w-full px-4 py-3 rounded-lg border transition-all duration-300",
+            "text-black placeholder:text-gray-400",
             "focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent",
             error
               ? "border-red-500 focus:ring-red-500"
               : "border-gray-300 focus:border-blue-500",
-            "disabled:bg-gray-100 disabled:cursor-not-allowed",
+            "disabled:bg-gray-100 disabled:cursor-not-allowed disabled:text-gray-500",
             className
           )}
           whileFocus={{ scale: 1.01 }}

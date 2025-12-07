@@ -48,6 +48,8 @@ cp .env.example .env.local
 ```
 
 4. Update `.env.local` with your configuration values.
+   - `NEXT_PUBLIC_API_URL` should point to the backend REST API (e.g. `https://api-backend-dev-xxxxx-ew.a.run.app/api/v1`)
+   - `NEXT_PUBLIC_CHAT_API_URL` should point to the chatbot root (no `/api/v1`, e.g. `https://api-backend-dev-xxxxx-ew.a.run.app`)
 
 5. Run the development server:
 ```bash
